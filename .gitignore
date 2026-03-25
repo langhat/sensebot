@@ -1,0 +1,14 @@
+# builds
+build/
+
+# tests
+test/
+
+# binrary
+*.exe
+*.out
+*.bin
+*.x86_64
+
+# temp
+*.tmp

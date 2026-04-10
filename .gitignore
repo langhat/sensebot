@@ -9,6 +9,11 @@ test/
 *.out
 *.bin
 *.x86_64
+src/*.exe
 
 # temp
 *.tmp
+
+# IDE Settings
+*~
+src/*~

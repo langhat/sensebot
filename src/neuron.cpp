@@ -1,14 +1,17 @@
 #ifndef NEURON_CPP
 #define NEURON_CPP
 
-#include<vector>
+#include <vector>
+#include <cmath>
 
+using std::exp;
 using real = long double;
 
 class neuron {
 public:
-	virtual real count() =0;
-}
+	virtual real count() = 0;
+	virtual void set_inside(real) {}
+};
 
 class norneuron: public neuron {
 protected:
@@ -16,23 +19,24 @@ protected:
 	std::vector<real>    ws;
 public:
 	norneuron() {
-
+		
 	}
 	virtual real active(real in) {
 		return (in > 0) ? in : 0;
 	}
 	virtual real count() {
-		real result;int index=0;
-		for(const auto &ptr: source) {
+		real result = 0.0;
+		int index = 0;
+		for (const auto &ptr: source) {
 			if(ptr) {
-				result += *ptr.count() * ws[index];
+				result += ptr->count() * ws[index];
 			}
 			index++;
 		}
 		return active(result);
 	}
 
-}
+};
 
 class rneuron: public norneuron {
 	real store;
@@ -41,8 +45,9 @@ public:
 	    return 1.0 / (1.0 + exp(-memory));
 	}
 	real count() {
-		real result;int index=0;
-		for(const auto &ptr: source) {
+		real result = 0.0;
+		int index=0;
+		for (const auto &ptr: source) {
 			if(ptr) {
 				result += ptr->count() * ws[index];
 			}
@@ -53,7 +58,7 @@ public:
 
 		return store = active(result);
 	}
-}
+};
 
 class input: public neuron {
 	real inside;
@@ -65,6 +70,6 @@ public:
 	void set_inside(real inv) {
 		inside = inv;
 	}
-}
+};
 
 #endif

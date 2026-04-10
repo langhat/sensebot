@@ -2,6 +2,9 @@
 
 #include <iostream>
 #include <fstream>
+#include <vector>
+#include <string>
+#include <utility>
 #include "network.cpp"
 
 #ifdef _WIN32
@@ -16,49 +19,63 @@
 #endif
 
 using std::string;
-using namespace std;
 
 class SenseMain {
 	std::vector<string> args;
-	//network nw;
 public:
-	SenseMain(std::vector<string> &args):
+	SenseMain(std::vector<string>& args) :
 		args(std::move(args)) {
-		
+
 	}
-	SenseMain() {}
+	SenseMain() = default;
 
 	void run() {
 		using std::cout;
-		for(auto index = 0; index < args.size(); index++) {
+		using std::cerr;
+		for (size_t index = 0; index < args.size(); index++) {
 			if (args[index] == "test") {
 				cout << "Training...\npls wait\n";
 				sleep(1);
 				cout << "End!";
-				//TODO
 			}
-			else if(args[index] == "load") {
+			else if (args[index] == "load") {
+				if (index + 1 >= args.size()) {
+					std::cerr << "Error: 'load' requires a filename argument.\n";
+					continue;
+				}
 				string fina = args[++index];
-				ifstream ifp(fina);
+				std::ifstream ifp(fina);
+				if (!ifp) {
+					cerr << "Error: cannot open file '" << fina << "'\n";
+					continue;
+				}
 				string content, temp;
-				while(getline(ifp, temp)) {
+				while (std::getline(ifp, temp)) {
 					content += temp;
 				}
 				cout << "(" << content << ")\n";
 			}
-			else if(args[index] == "init") {
+			else if (args[index] == "init") {
+				if (index + 1 >= args.size()) {
+					cerr << "Error: 'init' requires a filename argument.\n";
+					continue;
+				}
 				string fina = args[++index];
-				ofstream ofp(fina);
-			} else if(args[index] == "demo") {
-				network nw(2, 3);
+				std::ofstream ofp(fina);
+			}
+			else if (args[index] == "demo") {
+				network nw(2, 2);
 				std::vector<real> in(2);
-				using std::cin;
 				cout << ": " << std::flush;
+				using std::cin;
 				cin >> in[0] >> in[1];
-				for(const auto &ec: nw.count(in)) {
+				for (const auto& ec : nw.count(in)) {
 					cout << ec << " ";
 				}
 				cout << std::endl;
+			}
+			else {
+				cerr << "Unknown command: " << args[index] << "\n";
 			}
 		}
 	}

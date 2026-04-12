@@ -3,7 +3,7 @@
 #include <string>
 #include <cstdlib>
 #include <ctime>
-#include "SenseMain.cpp"
+#include "SenseMain.h"
 
 int main(int argc, char** argv) {
 	using std::vector;

@@ -1,83 +1,76 @@
-#ifndef NEURON_CPP
-#define NEURON_CPP
+#include "neuron.h"
+#include <cstdlib>
 
-#include <vector>
-#include <cmath>
+real norneuron::active(real in) {
+    return (in > 0) ? in : 0;
+}
 
-using std::exp;
-using real = long double;
+real norneuron::count() {
+    real result = 0.0;
+    int index = 0;
+    for (const auto& ptr : source) {
+        if (ptr) {
+            result += ptr->count() * ws[index];
+        }
+        index++;
+    }
+    return active(result);
+}
 
-class neuron {
-public:
-	virtual ~neuron() = default;
-	virtual real count() = 0;
-	virtual void set_inside(real) {}
-};
+void norneuron::add_connection(neuron* src, real weight) {
+    source.push_back(src);
+    ws.push_back(weight);
+}
 
-class norneuron : public neuron {
-protected:
-	std::vector<neuron*> source;
-	std::vector<real>    ws;
-public:
-	norneuron() = default;
-	virtual real active(real in) {
-		return (in > 0) ? in : 0;
-	}
-	virtual real count() {
-		real result = 0.0;
-		int index = 0;
-		for (const auto& ptr : source) {
-			if (ptr) {
-				result += ptr->count() * ws[index];
-			}
-			index++;
-		}
-		return active(result);
-	}
-	void add_connection(neuron* src, real weight) {
-		source.push_back(src);
-		ws.push_back(weight);
-	}
-};
+real norneuron::get_weight(size_t index) const {
+    if (index < ws.size()) {
+        return ws[index];
+    }
+    return 0.0;
+}
 
-class rneuron : public norneuron {
-	real store;
-	real fweight;
-public:
-	rneuron() : store(0.0), fweight(0.0) {
-		fweight = (std::rand() / (RAND_MAX + 1.0)) - 0.5;
-	}
-	real forget(real memory) {
-		return 1.0 / (1.0 + exp(-memory));
-	}
-	real count() {
-		real result = 0.0;
-		int index = 0;
-		for (const auto& ptr : source) {
-			if (ptr) {
-				result += ptr->count() * ws[index];
-			}
-			index++;
-		}
-		result += store * fweight;
-		store = active(result);
-		return store;
-	}
-	void set_fweight(real w) {
-		fweight = w;
-	}
-};
+void norneuron::set_weight(size_t index, real weight) {
+    if (index < ws.size()) {
+        ws[index] = weight;
+    }
+}
 
-class input : public neuron {
-	real inside;
-public:
-	input(real inv = 0.0) : inside(inv) {}
-	real count() {
-		return inside;
-	}
-	void set_inside(real inv) {
-		inside = inv;
-	}
-};
+size_t norneuron::get_connection_count() const {
+    return ws.size();
+}
 
-#endif
+rneuron::rneuron() : store(0.0), fweight(0.0) {
+    fweight = (std::rand() / (RAND_MAX + 1.0)) - 0.5;
+}
+
+real rneuron::forget(real memory) {
+    return 1.0 / (1.0 + exp(-memory));
+}
+
+real rneuron::count() {
+    real result = 0.0;
+    int index = 0;
+    for (const auto& ptr : source) {
+        if (ptr) {
+            result += ptr->count() * ws[index];
+        }
+        index++;
+    }
+    result += store * fweight;
+    store = active(result);
+    return store;
+}
+
+void rneuron::set_fweight(real w) {
+    fweight = w;
+}
+
+input::input(real inv) : inside(inv) {}
+
+real input::count() {
+    return inside;
+}
+
+void input::set_inside(real inv) {
+    inside = inv;
+}

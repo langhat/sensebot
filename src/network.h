@@ -12,9 +12,9 @@ public:
 
 class network {
     std::vector<neuron*> neurons;
-    int line, cloumn;
+    int line, column;
 public:
-    network(int line, int cloumn);
+    network(int line, int column);
     ~network();
     std::vector<real> count(std::vector<real> inputs);
     void train(std::vector<real> inputs, std::vector<real> targets, real learning_rate);

@@ -1,5 +1,0 @@
-# SenseBot
-
-使用时要在noun/resources.py中写上自己的API Key!
-编译： g++ src/*.cpp -o sensebot.exe -std=c++20
-聊天：./sensebot.exe chat

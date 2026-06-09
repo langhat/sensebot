@@ -17,3 +17,6 @@ src/*.exe
 # IDE Settings
 *~
 src/*~
+
+# private
+noun/programs/resource.py

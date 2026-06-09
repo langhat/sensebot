@@ -100,6 +100,9 @@ void SenseMain::run() {
                     cerr << "Error: " << e.what() << "\n";
                 }
             }
+            else if (args[index] == "chat") {
+                exit(system("python noun/main.py"));
+            }
             else {
                 cerr << "Unknown command: " << args[index] << "\n";
             }

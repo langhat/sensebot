@@ -17,3 +17,7 @@ src/*.exe
 # IDE Settings
 *~
 src/*~
+
+/SenseBot.docx
+/noun/resources.py
+/noun/system1.txt

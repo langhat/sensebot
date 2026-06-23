@@ -19,5 +19,7 @@ src/*.exe
 src/*~
 
 /SenseBot.docx
-/noun/resources.py
 /noun/system1.txt
+/noun/resources.py
+/noun/__pycache__
+/sensebot*

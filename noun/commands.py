@@ -1,15 +1,15 @@
 def ReadFile(path):
     try:
-        with open(path, 'r', encoding='utf-8') as f:
+        with open(path, 'r', encoding = 'utf-8') as f:
             content = f.read()
         return {"status": "success", "content": content}
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
-def WriteFileDiff(path, content, mode="append"):
+def WriteFileDiff(path, content, mode = "append"):
     try:
         if mode == "append":
-            with open(path, 'r', encoding='utf-8') as f:
+            with open(path, 'r', encoding = 'utf-8') as f:
                 existing_content = f.read()
             new_content = existing_content + "\n" + content
         elif mode == "replace":
@@ -17,7 +17,7 @@ def WriteFileDiff(path, content, mode="append"):
         else:
             return {"status": "error", "message": "无效的模式: 必须是 'append' 或 'replace'"}
 
-        with open(path, 'w', encoding='utf-8') as f:
+        with open(path, 'w', encoding = 'utf-8') as f:
             f.write(new_content)
         return {"status": "success", "message": "文件已成功写入"}
     except Exception as e:
@@ -32,7 +32,7 @@ def SearchFile(path, pattern):
 
 def SearchContent(path, pattern):
     try:
-        with open(path, 'r', encoding='utf-8') as f:
+        with open(path, 'r', encoding = 'utf-8') as f:
             content = f.read()
         matches = re.findall(pattern, content)
         return {"status": "success", "matches": matches}
@@ -43,10 +43,10 @@ def RunCmd(command):
     try:
         result = subprocess.run(
             command,
-            shell=True,
-            capture_output=True,
-            text=True,
-            check=True
+            shell = True,
+            capture_output = True,
+            text = True,
+            check = True
         )
         return {
             "status": "success",
